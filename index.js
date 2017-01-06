@@ -9,6 +9,12 @@ var args = require('minimist')(process.argv.slice(2)),
       '.styl': './stylus'
     };
 
+if (args.v) {
+  var package = fs.readFileSync(__dirname + '/package.json', 'utf8'), json = JSON.parse(package);
+  console.log(json.version);
+  process.exit();
+}
+
 var filename = args._[0], extname = path.extname(filename), error;
 if (!filename) {
   error = 'file is missing';
