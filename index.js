@@ -20,7 +20,7 @@ if (!filename) {
   error = 'unsupported file type';
 }
 if (error) {
-  console.log(error + filename ? ':' : '', filename ? filename : '');
+  console.log(error + (filename ? ':' : ''), filename ? filename : '');
   process.exit(1);
 }
 
