@@ -57,5 +57,5 @@ fs.watch(filename, function (eventType) {
   if (eventType !== 'change')
     return;
   clearTimeout(timeout);
-  timeout = setTimeout(handler, 10);
+  timeout = setTimeout(handler, 100);
 });
