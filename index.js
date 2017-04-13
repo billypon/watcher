@@ -15,14 +15,14 @@ if (args.v) {
   process.exit();
 }
 
-var filename = args._[0], extname = path.extname(filename), error;
+var filename = args._[0], extname, error;
 if (!filename) {
   error = 'file is missing';
 } else if (!fs.existsSync(filename)) {
   error = 'invalid file';
 } else if (!fs.statSync(filename).isFile()) {
   error = 'path must be file';
-} else if (!types[extname]) {
+} else if (!types[extname = path.extname(filename)]) {
   error = 'unsupported file type';
 }
 if (error) {
