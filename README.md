@@ -1,5 +1,6 @@
 ## usage
 
-    -p: change dir to path of file
-    -c: compile before watch
-    -v: show current version
+    -p: Change dir to path of file
+    -i: Compile once immediately
+    -v: Display version
+    -h: Display help information
