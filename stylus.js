@@ -3,9 +3,9 @@
 var stylus = require('stylus');
 
 module.exports = function (options) {
-  return function (str, filename) {
-    stylus(str)
-      .set('filename', filename)
+  return function (file) {
+    stylus(file.content)
+      .set('filename', file.fullname)
       .set('include css', options['include-css'])
       .render(function (err, css) {
         if (err)

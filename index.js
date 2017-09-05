@@ -17,25 +17,40 @@ if (argv.v) {
   version();
 }
 
-var filename = argv._[0], compiler, error;
+var modules = {
+  '.styl': ['stylus', ['-p']],
+  '.dot': ['graphviz']
+};
+
+if (argv.l) {
+  list();
+}
+
+var filename = argv._[0],
+    dirname = path.dirname(filename),
+    basename = path.basename(filename),
+    extname = path.extname(filename),
+    compiler, error;
 check();
 
-if (argv.p) {
+if (argv.c) {
   process.chdir(path.dirname(filename));
   filename = path.basename(filename);
 }
 
 if (argv.i) {
-  handler(true);
+  handler();
 }
 
 console.log('start watching:', filename.green)
 var timeout;
-fs.watch(filename, function (eventType) {
+fs.watch(filename, function (eventType, target) {
   if (eventType !== 'change')
     return;
   clearTimeout(timeout);
-  timeout = setTimeout(handler, 100);
+  timeout = setTimeout(function () {
+    handler(target);
+  }, 100);
 });
 
 function check() {
@@ -46,18 +61,11 @@ function check() {
   } else if (!fs.statSync(filename).isFile()) {
     error = 'path must be file';
   } else {
-    var module, opts;
-    switch (path.extname(filename)) {
-      case '.styl':
-        module = "stylus";
-        opts = options('-p');
-        break;
-      default:
-        error = 'unsupported file type';
-    }
+    var module = modules[extname];
     if (module) {
-      compiler = require('./' + module)(opts || options());
-      return;
+      compiler = require('./' + module[0])(options(module[1] || []));
+    } else {
+      error = 'unsupported file type';
     }
   }
   if (error) {
@@ -78,27 +86,41 @@ function options() {
   return minimist(options, opts);
 }
 
-function handler(silent) {
-  if (!silent) {
+function handler(target) {
+  if (!target) {
     console.log('file is changed!'.cyan);
   }
-  var str = fs.readFileSync(filename, 'utf8');
-  compiler(str, filename);
+  compiler({
+    fullname: filename,
+    dirname: dirname,
+    filename: basename,
+    basename: path.basename(basename, extname),
+    extname: extname,
+    content: fs.readFileSync(filename, 'utf8')
+  });
+}
+
+function list() {
+  for (var ext in modules) {
+    console.log('*' + ext + '\t' + modules[ext][0]);
+  }
+  process.exit();
 }
 
 function help() {
   console.log([
-      'Usage:'
-    , '  watch-compiler file [options]'
-    , '  watch-compiler file [options] -- [arguments]'
-    , ''
-    , 'Options:'
-    , '  -p   Change dir to path of file'
-    , '  -i   Compile once immediately'
-    , '  -v   Display version'
-    , '  -h   Display help information'
-    , ''
-    , 'Arguments: Compiler options'
+    'Usage:',
+    '  watcher filename [options]',
+    '  watcher filename [options] -- [arguments]',
+    '',
+    'Options:',
+    '  -c   Change dir to path of file',
+    '  -h   Display help information',
+    '  -i   Compile once immediately',
+    '  -l   List compilers',
+    '  -v   Display version',
+    '',
+    'Arguments: Compiler options'
   ].join('\n'));
   process.exit();
 }

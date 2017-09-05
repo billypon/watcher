@@ -1,19 +1,19 @@
 {
-  "name": "watch-compiler",
+  "name": "watcher",
   "version": "1.1.0",
   "description": "A CLI tool to watch and compile files",
   "author": "billypon <billypon@gmail.com>",
   "bin": {
-    "watch-compiler": "./index.js"
+    "watcher": "./index.js"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/billypon/watch-compiler.git"
+    "url": "git+https://github.com/billypon/watcher.git"
   },
   "license": "MIT",
   "dependencies": {
     "colors": "^1.1.2",
     "minimist": "^1.2.0",
-    "stylus": "*"
+    "stylus": "^0.54.5"
   }
 }
