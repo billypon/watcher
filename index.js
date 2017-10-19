@@ -87,7 +87,7 @@ function options() {
 }
 
 function handler(target) {
-  if (!target) {
+  if (target) {
     console.log('file is changed!'.cyan);
   }
   compiler({
