@@ -3,6 +3,9 @@
 var pug = require('pug');
 
 module.exports = function (options) {
+  options = options || {};
+  options.pretty = true;
+  options.doctype = 'html';
   return function (file) {
     pug.render(file.content, options, function (err, html) {
       if (err)

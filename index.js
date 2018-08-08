@@ -17,14 +17,10 @@ if (argv.v) {
   version();
 }
 
-var pugOptions = {
-  pretty: true
-}
-
 var modules = {
-  '.styl': ['stylus'],
-  '.pug': ['pug', pugOptions],
-  '.dot': ['graphviz']
+  '.styl': 'stylus',
+  '.pug': 'pug',
+  '.dot': 'graphviz'
 };
 
 if (argv.l) {
@@ -68,7 +64,7 @@ function check() {
   } else {
     var module = modules[extname];
     if (module) {
-      compiler = require('./' + module[0])(options(minimist(argv['--']), module[1]));
+      compiler = require('./' + module)(minimist(argv['--']));
     } else {
       error = 'unsupported file type';
     }
@@ -77,16 +73,6 @@ function check() {
     console.log(error + (filename ? ':' : ''), filename ? filename : '');
     process.exit(1);
   }
-}
-
-function options(argv, opts) {
-  opts = opts || {};
-  for (var x in opts) {
-    if (argv[x] === undefined) {
-      argv[x] = opts[x];
-    }
-  }
-  return argv;
 }
 
 function handler(target) {
