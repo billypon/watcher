@@ -64,7 +64,7 @@ function check() {
   } else {
     var module = modules[extname];
     if (module) {
-      compiler = require('./' + module)(minimist(argv['--']));
+      compiler = require('./' + module)(minimist(argv['--']), filename);
     } else {
       error = 'unsupported file type';
     }

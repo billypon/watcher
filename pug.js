@@ -2,8 +2,9 @@
 
 var pug = require('pug');
 
-module.exports = function (options) {
+module.exports = function (options, filename) {
   options = options || {};
+  options.filename = filename;
   options.pretty = true;
   options.doctype = 'html';
   return function (file) {
