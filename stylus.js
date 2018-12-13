@@ -1,17 +1,15 @@
-'use strict';
-
-var stylus = require('stylus');
+const stylus = require('stylus');
+const lodash = require('lodash');
 
 module.exports = function (options) {
+  options = lodash.extend({}, options);
   return function (file) {
-    stylus(file.content)
-      .set('filename', file.fullname)
-      .set('include css', options['include-css'])
-      .render(function (err, css) {
-        if (err)
-          console.error(err.toString());
-        else
-          console.log(css);
-      });
+    options.filename = file.fullname;
+    stylus.render(file.content, options, function (err, css) {
+      if (err)
+        console.error(err.toString());
+      else
+        console.log(css);
+    });
   };
 }
